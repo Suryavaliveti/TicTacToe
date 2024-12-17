@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        .container{
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .box{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            background-color: aqua;
+            cursor: pointer;
+            font-size: 2em;
+        }
+        #status {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .players{
+            justify-content: center;
+            display: flex;
+            gap: 30px;
+            font-style:italic;
+        }
+        #player1{
+            color: white;
+            display: flex;
+            background-color: black;
+            border-radius: 5%;
+            width: 80px;
+            padding: 1rem;
+        }
+
+        #player2 {
+            
+            color: white;
+            display: flex;
+            background-color: black;
+            border-radius: 5%;
+            width: 80px;
+            padding: 1rem;
+        }
+        #btn{
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+
+        }
+    </style>
+</head>
+<body>
+    <h1 >Tic Tac Toe</h1>
+    <div id="game" class="container">
+        <div class="box" onclick="changeText(0)"></div>
+        <div class="box" onclick="changeText(1)"></div>
+        <div class="box" onclick="changeText(2)"></div>
+        <div class="box" onclick="changeText(3)"></div>
+        <div class="box" onclick="changeText(4)"></div>
+        <div class="box" onclick="changeText(5)"></div>
+        <div class="box" onclick="changeText(6)"></div>
+        <div class="box" onclick="changeText(7)"></div>
+        <div class="box" onclick="changeText(8)"></div>
+    </div>
+    
+    <p id="status">:)</p>
+    <div class="players">
+        <div id="player1">player1:<span id="score1">0</span></div>
+        <div id="player2">player2:<span id="score2">0</span></div>
+
+    </div>
+    <button id="btn" onclick="resetGame()">Reset Game</button>
+        
+    
+</body>
+<script>
+    let app = ['', '', '', '', '', '', '', '', '']; 
+    let currentPlayer ='X'; 
+    let gameActive = true;
+    const status = document.getElementById('status');
+    let box=document.getElementsByClassName('box');
+    const score1 = document.getElementById('score1');
+    const score2 = document.getElementById('score2');
+    let s1=0;
+    let s2=0;
+
+function changeText(index) {
+    if (app[index] !== '' || !gameActive) return; 
+
+    app[index] = currentPlayer;
+    box[index].innerText = currentPlayer;
+
+    if (checkWin()) {
+        gameActive = false;
+        status.innerText = `${currentPlayer} wins!`;
+        if(currentPlayer==='X'){
+            s1++;
+            score1.innerText=s1;
+
+        }
+        else{
+            s2++;
+            score2.innerText=s2;
+        }
+        if (s1 === 5) {
+            status.innerText = 'Player 1 (X) wins the game with 5 points!';
+            gameActive = false;
+        } else if (s2 === 5) {
+            status.innerText = 'Player 2 (O) wins the game with 5 points!';
+            gameActive = false;
+        }
+
+    } else if (app.every(box => box !== '')) {
+        gameActive = false;
+        status.innerText = 'It\'s a tie!';
+    } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; 
+    }
+}
+
+function checkWin() {
+    const winPatterns = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+    [0, 4, 8], [2, 4, 6] 
+    ];
+
+    return winPatterns.some(pattern => {
+        const [a, b, c] = pattern;
+        return app[a] && app[a] === app[b] && app[a] === app[c];
+    });
+}
+
+function resetGame() {
+    app = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = 'X';
+    gameActive = true;
+    status.innerText = '';
+    
+    Array.from(box).forEach(cell => {
+        cell.innerText = '';
+    });
+}
+    
+
+</script>
+</html>
